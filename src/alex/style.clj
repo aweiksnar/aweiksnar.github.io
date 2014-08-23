@@ -46,7 +46,8 @@
       :display "block"}]
    (at-media {:screen true :max-width (px 520)}
      [:#wooly
-        {:margin [[(px 40) "auto"]]}]))
+        {:margin [[(px 40) "auto"]]
+         :width (px 200)}]))
 
 (defstyles site-bottom-menu
   [:#site-bottom-menu
