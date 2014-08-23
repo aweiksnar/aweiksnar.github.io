@@ -12,7 +12,6 @@
   :garden {:builds [{:id "main"
                      :stylesheet alex.style/main
                      :compiler {:output-to "main.css"}}]}
-
   :source-paths ["src"]
 
   :cljsbuild {
@@ -23,3 +22,7 @@
                 :output-dir "out"
                 :optimizations :none
                 :source-map true}}]})
+
+;; scripts
+;; lein cljsbuild auto
+;; lein garden auto

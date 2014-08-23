@@ -4,16 +4,64 @@
 }
 
 body {
-  line-height: 1.5;
-  font-size: 13px;
-  font-family: sans-serif;
+  font-family: Special Elite;
 }
 
 #site-main-title {
-  font-size: 40px;
   text-align: center;
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  background-color: rgb(255, 69, 102);
+  line-height: 100px;
+  width: 100%;
+  background-color: #FFF9F5;
+}
+
+#site-main-title h1 {
+  transition: font-size 0.25s;
+  letter-spacing: 10px;
+  color: #000;
+  font-size: 35px;
+}
+
+@media screen and (max-width: 520px) {
+
+  #site-main-title h1 {
+    letter-spacing: 2px;
+    font-size: 25px;
+  }
+
+}
+
+#wooly {
+  display: block;
+  margin: 100px auto;
+}
+
+@media screen and (max-width: 520px) {
+
+  #wooly {
+    margin: 40px auto;
+  }
+
+}
+
+#site-bottom-menu {
+  margin-left: -50%;
+  left: 50%;
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  text-align: center;
+  background-color: #FFF9F5;
+}
+
+#site-bottom-menu a {
+  text-decoration: none;
+  color: #000;
+  margin: 0 10px;
+  line-height: 80px;
+  font-size: 20px;
+  font-family: Special Elite;
+}
+
+#site-bottom-menu a:hover {
+  color: rgb(255, 69, 102);
 }
