@@ -18,12 +18,6 @@
   [:body
     {:font-family font-special-elite}])
 
-(defstyles centered-fixed-full-width
-  {:position "fixed"
-   :width (percent 100)
-   :left (percent 50)
-   :margin-left (percent -50)})
-
 (defstyles site-main-title
   [:#site-main-title
     {:background-color color-faint-orange
@@ -51,8 +45,9 @@
 
 (defstyles site-bottom-menu
   [:#site-bottom-menu
-     centered-fixed-full-width
-     {:background-color color-faint-orange
+     {:position "fixed"
+      :width (percent 100)
+      :background-color color-faint-orange
       :text-align "center"
       :bottom (px 0)}
       [:a
