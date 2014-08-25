@@ -4,7 +4,8 @@
 
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2311"]
-                 [garden "1.2.1"]]
+                 [garden "1.2.1"]
+                 [prismatic/dommy "0.1.3"]]
 
   :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]
             [lein-garden "0.1.9"]]

@@ -1,6 +1,6 @@
 (ns alex.style
   (:require [garden.def :refer [defstylesheet defstyles]]
-            [garden.units :refer [px percent]]
+            [garden.units :refer [px percent em]]
             [garden.stylesheet :refer [at-media]]))
 
 (def color-hot-pink "rgb(255, 69, 102)")
@@ -34,14 +34,34 @@
            {:font-size (px 25)
             :letter-spacing (px 2)}])])
 
+(defn centered-absolute [width]
+  {:position "absolute"
+   :width (px width)
+   :left (percent 50)
+   :margin-left (px (- (/ width 2)))})
+
 (defstyles hero-image
-  [:#wooly
-     {:margin [[(px 100) "auto"]]
-      :display "block"}]
+  (def hero-width 240)
+   [:#wooly
+     (centered-absolute hero-width)
+     {:top (px 200)
+      :display "block"
+      :transition "1s all ease"
+      :z-index (- 1)}
+      [:&.moved-top-left
+         {:top (px 10)
+          :left "40%"
+          :width (px 100)}]]
    (at-media {:screen true :max-width (px 520)}
      [:#wooly
-        {:margin [[(px 40) "auto"]]
-         :width (px 200)}]))
+        (centered-absolute 200)
+        {:top (px 140)}]))
+
+(defstyles hero-image-speech
+  [:#wooly-speech
+     {:position "absolute"
+      :margin-top (em -1)
+      :z-index (- 1)}])
 
 (defstyles site-bottom-menu
   [:#site-bottom-menu
@@ -65,5 +85,6 @@
   body
   site-main-title
   hero-image
+  hero-image-speech
   site-bottom-menu
   )
