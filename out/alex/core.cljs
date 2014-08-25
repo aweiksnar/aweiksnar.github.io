@@ -30,12 +30,6 @@
   "half the height of an element"
   (/ (.-height elem) 2))
 
-(defn move-to [x y elem]
-  "moves an absolutely positioned element to x y"
-  (let [el-x (pos :left elem)
-        el-y (pos :top elem)]
-    (log el-y)))
-
 (defn toggle-elems [& elems]
   "toggles visibility of a list of elements"
   (doseq [elem elems]
