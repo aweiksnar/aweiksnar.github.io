@@ -1,77 +1,66 @@
 (ns alex.core
-  (:require 
+  (:refer-clojure :exclude [map])
+  (:require
      [dommy.utils :as utils]
-     [dommy.core :as d])
+     [dommy.core :as d]
+     [cljs.core.async :refer [!> <! chan put! close! timeout map]])
+  (:require-macros
+     [cljs.core.async.macros :refer [go alt!]])
   (:use-macros
      [dommy.macros :only (node sel sel1)]))
 
 (enable-console-print!)
-
-;; TODO: make a wooly namespace
-;; a helpers namespace
-;; a universal transition time location
-;; make toggle safer with explicit switch
 
 (def wooly-img (sel1 :#wooly))
 (def wooly-speech (sel1 :#wooly-speech))
 (def site-main-title (sel1 :#site-main-title))
 (def site-bottom-menu (sel1 :#site-bottom-menu))
 
-(defn log [stuff]
-  "log stuff"
-  (.log js/console stuff))
-
-(defn pos [side el]
-  "px position of an elements side"
-  (side 
-    (d/bounding-client-rect el)))
+(defn pos [side elem]
+  "abs px position of an elements side"
+  (side (d/bounding-client-rect elem)))
 
 (defn half-height [elem]
   "half the height of an element"
   (/ (.-height elem) 2))
 
-(defn toggle-elems [& elems]
-  "toggles visibility of a list of elements"
-  (doseq [elem elems]
-    (d/toggle! elem)))
-
 (defn str-px [s]
   "builds a string with 'px' added to the end of it"
   (str s "px"))
 
-(defn elem-is-empty [elem]
-  (empty? (d/html elem)))
-
 (defn add-text-to-right-side! [args-map]
   "adds vertically-centered text to the right side of an element
    expects a map with target-elem, text-elem, and text keys"
-  (let [{:keys [target-elem text-elem text delay-time]} args-map]
+  (let [{:keys [target-elem text-elem text]} args-map]
       (d/set-text! text-elem text)
       (d/set-style! text-elem
-                    :top (str-px (+ (pos :top target-elem) 
+                    :top (str-px (+ (pos :top target-elem)
                                     (half-height target-elem)))
                     :left (str-px (pos :right target-elem)))))
 
-(defn show-wooly-message! [message delay-time]
-  "displays message on right side of wooly image after specified delay (ms)"
-  (js/setTimeout
-    #(add-text-to-right-side!
-       {:target-elem wooly-img
-        :text-elem wooly-speech 
-        :text message})
-    delay-time))
+(defn events [elem type]
+  (let [out (chan)]
+    (d/listen! elem type
+               (fn [e] (put! out e)))
+       out))
 
+;; event code - element specific
 
-(defn toggle-wooly-transition! []
-  "toggles transition effect of wooly image"
-  (d/toggle-class! wooly-img "moved-top-left")
+(defn init-wooly-transition []
+  (let [clicks (events wooly-img "click")]
+   (go (loop [transition true
+              display false]
+         (<! clicks)
+         (d/toggle-class! wooly-img "moved-top-left" transition)
+         (d/toggle! site-main-title display)
+         (d/toggle! site-bottom-menu display)
 
-  (toggle-elems site-main-title site-bottom-menu)
-  
-  (if (elem-is-empty wooly-speech)
-    (show-wooly-message! "hey don't click on me" 1000)
-  (d/set-text! wooly-speech "")))
+         (<! (timeout 1000))
 
-(d/listen! wooly-img
-           :click toggle-wooly-transition!)
+         (if transition
+           (add-text-to-right-side! {:target-elem wooly-img :text-elem wooly-speech :text "hey don't click on me"})
+           (d/set-text! wooly-speech ""))
 
+         (recur (not transition) (not display))))))
+
+(init-wooly-transition)
